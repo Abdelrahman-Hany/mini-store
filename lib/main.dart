@@ -6,6 +6,8 @@ import 'package:mini_store/features/auth/presentation/bloc/auth_event.dart';
 import 'package:mini_store/features/auth/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_store/features/product/presentation/bloc/product_bloc.dart';
+import 'package:mini_store/features/product/presentation/pages/product_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +17,7 @@ void main() async {
       providers: [
         BlocProvider(create: (_) => serviceLocator<AppUserCubit>()),
         BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
+        BlocProvider(create: (_) => serviceLocator<ProductBloc>()),
       ],
       child: const MyApp(),
     ),
@@ -48,9 +51,7 @@ class _MyAppState extends State<MyApp> {
         },
         builder: (context, state) {
           if (state) {
-            return Scaffold(
-              body: Text("Welcome to Mini Store"),
-            );
+            return const ProductPage();
           }
           return const LoginPage();
         },
