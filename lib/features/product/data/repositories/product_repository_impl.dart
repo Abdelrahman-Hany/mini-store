@@ -2,7 +2,7 @@ import 'package:fpdart/src/either.dart';
 import 'package:mini_store/core/error/exceptions.dart';
 import 'package:mini_store/core/error/failures.dart';
 import 'package:mini_store/features/product/data/datasources/product_remote_data_source.dart';
-import 'package:mini_store/features/product/domain/entities/product.dart';
+import 'package:mini_store/core/common/entities/product.dart';
 import 'package:mini_store/features/product/domain/repositories/product_repository.dart';
 
 class ProductRepositoryImpl implements ProductRepository {

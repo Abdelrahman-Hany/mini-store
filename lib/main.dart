@@ -1,4 +1,5 @@
 import 'package:mini_store/core/common/cubit/app_user/app_user_cubit.dart';
+import 'package:mini_store/core/common/widgets/main_screen.dart';
 import 'package:mini_store/core/theme/theme.dart';
 import 'package:mini_store/dependancy_injection.dart';
 import 'package:mini_store/features/auth/presentation/bloc/auth_bloc.dart';
@@ -6,8 +7,9 @@ import 'package:mini_store/features/auth/presentation/bloc/auth_event.dart';
 import 'package:mini_store/features/auth/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_store/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:mini_store/features/product/presentation/bloc/product_bloc.dart';
-import 'package:mini_store/features/product/presentation/pages/product_page.dart';
+import 'package:mini_store/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,8 @@ void main() async {
         BlocProvider(create: (_) => serviceLocator<AppUserCubit>()),
         BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
         BlocProvider(create: (_) => serviceLocator<ProductBloc>()),
+        BlocProvider(create: (_) => serviceLocator<CartCubit>()),
+        BlocProvider(create: (_) => serviceLocator<WishlistCubit>()),
       ],
       child: const MyApp(),
     ),
@@ -45,13 +49,12 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       home: BlocSelector<AppUserCubit, AppUserState, bool>(
-        // we used BlocSelector to catch one state in AppUserCubit which is AppUserLoggedIn state
         selector: (state) {
           return state is AppUserLoggedIn;
         },
         builder: (context, state) {
           if (state) {
-            return const ProductPage();
+            return const MainScreen();
           }
           return const LoginPage();
         },

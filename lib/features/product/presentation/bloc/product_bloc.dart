@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_store/core/usecase/usecase.dart';
-import 'package:mini_store/features/product/domain/entities/product.dart';
+import 'package:mini_store/core/common/entities/product.dart';
 import 'package:mini_store/features/product/domain/usecases/get_all_products.dart';
 
 part 'product_event.dart';

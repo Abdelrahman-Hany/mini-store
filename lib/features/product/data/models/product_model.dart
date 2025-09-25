@@ -1,4 +1,4 @@
-import 'package:mini_store/features/product/domain/entities/product.dart';
+import 'package:mini_store/core/common/entities/product.dart';
 
 class ProductModel extends Product {
   ProductModel({

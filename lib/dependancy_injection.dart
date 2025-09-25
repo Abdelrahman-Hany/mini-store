@@ -9,11 +9,14 @@ import 'package:mini_store/features/auth/domain/usecases/user_login.dart';
 import 'package:mini_store/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:mini_store/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mini_store/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:mini_store/features/product/data/datasources/product_remote_data_source.dart';
 import 'package:mini_store/features/product/data/repositories/product_repository_impl.dart';
-import 'package:mini_store/features/product/domain/repositories/product_repository.dart' show ProductRepository;
+import 'package:mini_store/features/product/domain/repositories/product_repository.dart'
+    show ProductRepository;
 import 'package:mini_store/features/product/domain/usecases/get_all_products.dart';
 import 'package:mini_store/features/product/presentation/bloc/product_bloc.dart';
+import 'package:mini_store/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final serviceLocator = GetIt.instance;
@@ -21,13 +24,14 @@ final serviceLocator = GetIt.instance;
 Future<void> init() async {
   _initAuth();
   _initProduct();
+  _initCart();
+  _initWishlist();
+
   final supabase = await Supabase.initialize(
     url: AppSecrets.supabaseUrl,
     anonKey: AppSecrets.supabaseAnonKey,
   );
-  serviceLocator.registerLazySingleton(
-    () => supabase.client,
-  );
+  serviceLocator.registerLazySingleton(() => supabase.client);
 
   serviceLocator.registerLazySingleton(() => http.Client());
 
@@ -36,45 +40,31 @@ Future<void> init() async {
 
 void _initAuth() {
   //Data source
-  serviceLocator..registerFactory<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(
-      supabaseClient: serviceLocator(),
-    ),
-  )
+  serviceLocator
+    ..registerFactory<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(supabaseClient: serviceLocator()),
+    )
+    //Repository
+    ..registerFactory<AuthRepository>(
+      () => AuthRepositoryImpl(remoteDataSource: serviceLocator()),
+    )
+    //Usecases
+    ..registerFactory(() => UserSignUp(authRepository: serviceLocator()))
+    ..registerFactory(() => UserLogin(authRepository: serviceLocator()))
+    ..registerFactory(() => CurrentUser(authRepository: serviceLocator()))
+    //Bloc
+    ..registerLazySingleton(
+      () => AuthBloc(
+        userSignUp: serviceLocator(),
 
-  //Repository
-  ..registerFactory<AuthRepository>(
-    () => AuthRepositoryImpl(
-     remoteDataSource: serviceLocator(),
-    ),
-  )
+        userLogin: serviceLocator(),
 
-  //Usecases
-  ..registerFactory(
-    () => UserSignUp(
-     authRepository: serviceLocator(),
-    ),
-  )
+        currentUser: serviceLocator(),
 
-  ..registerFactory(() => UserLogin(authRepository: serviceLocator()))
-
-  ..registerFactory(() => CurrentUser(authRepository: serviceLocator()))
-
-  //Bloc
-  ..registerLazySingleton(
-    () => AuthBloc(
-      userSignUp:
-          serviceLocator(), 
-
-      userLogin: serviceLocator(),
-
-      currentUser: serviceLocator(),
-
-      appUserCubit: serviceLocator(),
-    ),
-  );
+        appUserCubit: serviceLocator(),
+      ),
+    );
 }
-
 
 void _initProduct() {
   serviceLocator
@@ -82,14 +72,18 @@ void _initProduct() {
       () => ProductRemoteDataSourceImpl(serviceLocator()),
     )
     ..registerFactory<ProductRepository>(
-      () => ProductRepositoryImpl(remoteDataSource:serviceLocator()),
+      () => ProductRepositoryImpl(remoteDataSource: serviceLocator()),
     )
-    ..registerFactory(
-      () => GetAllProducts(productRepository: serviceLocator()),
-    )
+    ..registerFactory(() => GetAllProducts(productRepository: serviceLocator()))
     ..registerLazySingleton(
-      () => ProductBloc(
-        getAllProducts: serviceLocator(),
-      ),
+      () => ProductBloc(getAllProducts: serviceLocator()),
     );
+}
+
+void _initCart() {
+  serviceLocator.registerLazySingleton(() => CartCubit());
+}
+
+void _initWishlist() {
+  serviceLocator.registerLazySingleton(() => WishlistCubit());
 }
