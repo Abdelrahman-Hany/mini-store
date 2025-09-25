@@ -11,7 +11,7 @@ class ProductModel extends Product {
     required super.rating,
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> map) {
+  factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
       id: map['id'] as int,
       title: map['title'] as String,
@@ -19,7 +19,8 @@ class ProductModel extends Product {
       description: map['description'] as String,
       category: map['category'] as String,
       image: map['image'] as String,
-      rating: RatingModel.fromJson(map['rating']),
+
+      rating: RatingModel.fromMap(map['rating'] as Map<String, dynamic>),
     );
   }
 }
@@ -27,7 +28,7 @@ class ProductModel extends Product {
 class RatingModel extends Rating {
   RatingModel({required super.rate, required super.count});
 
-  factory RatingModel.fromJson(Map<String, dynamic> map) {
+  factory RatingModel.fromMap(Map<String, dynamic> map) {
     return RatingModel(
       rate: (map['rate'] as num).toDouble(),
       count: map['count'] as int,
