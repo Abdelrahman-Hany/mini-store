@@ -6,6 +6,7 @@ import 'package:mini_store/features/auth/data/repositories/auth_repository_impl.
 import 'package:mini_store/features/auth/domain/repository/auth_repository.dart';
 import 'package:mini_store/features/auth/domain/usecases/current_user.dart';
 import 'package:mini_store/features/auth/domain/usecases/user_login.dart';
+import 'package:mini_store/features/auth/domain/usecases/user_logout.dart';
 import 'package:mini_store/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:mini_store/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -52,6 +53,7 @@ void _initAuth() {
     ..registerFactory(() => UserSignUp(authRepository: serviceLocator()))
     ..registerFactory(() => UserLogin(authRepository: serviceLocator()))
     ..registerFactory(() => CurrentUser(authRepository: serviceLocator()))
+    ..registerFactory(() => UserLogout(authRepository: serviceLocator()))
     //Bloc
     ..registerLazySingleton(
       () => AuthBloc(
@@ -62,6 +64,8 @@ void _initAuth() {
         currentUser: serviceLocator(),
 
         appUserCubit: serviceLocator(),
+
+        userLogout: serviceLocator(),
       ),
     );
 }
@@ -81,9 +85,13 @@ void _initProduct() {
 }
 
 void _initCart() {
-  serviceLocator.registerLazySingleton(() => CartCubit());
+  serviceLocator.registerLazySingleton(
+    () => CartCubit(appUserCubit: serviceLocator()),
+  );
 }
 
 void _initWishlist() {
-  serviceLocator.registerLazySingleton(() => WishlistCubit());
+  serviceLocator.registerLazySingleton(
+    () => WishlistCubit(appUserCubit: serviceLocator()),
+  );
 }

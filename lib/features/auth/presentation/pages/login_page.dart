@@ -5,7 +5,7 @@ import 'package:mini_store/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mini_store/features/auth/presentation/bloc/auth_event.dart';
 import 'package:mini_store/features/auth/presentation/pages/signup_page.dart';
 import 'package:mini_store/features/auth/presentation/widgets/auth_field.dart';
-import 'package:mini_store/features/auth/presentation/widgets/auth_gradient_button.dart';
+import 'package:mini_store/core/common/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthFailure) {
-              showSnackbar(context, state.message);
+              showSnackbar(context, state.message, isError: true);
             }
           },
           builder: (context, state) {
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                     isObscureText: true,
                   ),
                   SizedBox(height: 20),
-                  AuthGradientButton(
+                  GradientButton(
                     buttonText: 'Sign In',
                     onPressed: () {
                       if (formKey.currentState!.validate()) {

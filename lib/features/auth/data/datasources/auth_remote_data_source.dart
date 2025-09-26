@@ -12,6 +12,8 @@ abstract interface class AuthRemoteDataSource {
 
   Future<UserModel> loginWithEmailPasword({required email, required password});
 
+  Future<void> logout();
+
   Future<UserModel?> getCurrentUserData();
 }
 
@@ -58,6 +60,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw ServerException('User does not exist');
       }
       return UserModel.fromJeson(respons.user!.toJson());
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+    @override
+  Future<void> logout() async {
+    try {
+      await supabaseClient.auth.signOut();
     } catch (e) {
       throw ServerException(e.toString());
     }

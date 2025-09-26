@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_store/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:mini_store/features/auth/presentation/bloc/auth_event.dart';
 import 'package:mini_store/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:mini_store/features/cart/presentation/page/cart_page.dart';
 import 'package:mini_store/features/product/presentation/pages/product_page.dart';
@@ -30,6 +32,13 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<String> _pageTitles = ['Mini Store', 'My Wishlist', 'My Cart'];
 
+    void _logout() {
+    context.read<CartCubit>().clearCart();
+    context.read<WishlistCubit>().clearWishlist();
+
+    context.read<AuthBloc>().add(AuthLogoutEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +51,7 @@ class _MainScreenState extends State<MainScreen> {
                 label: Text(state.wishlistProductIds.length.toString()),
                 isLabelVisible: state.wishlistProductIds.isNotEmpty,
                 child: IconButton(
-                  onPressed: () => _onTabTapped(1), // Navigate to Wishlist
+                  onPressed: () => _onTabTapped(1),
                   icon: Icon(
                     _currentIndex == 1
                         ? Icons.favorite
@@ -67,6 +76,10 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               );
             },
+          ),
+           IconButton(
+            onPressed: _logout,
+            icon: const Icon(Icons.logout),
           ),
         ],
       ),

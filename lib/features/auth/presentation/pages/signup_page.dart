@@ -5,7 +5,7 @@ import 'package:mini_store/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mini_store/features/auth/presentation/bloc/auth_event.dart';
 import 'package:mini_store/features/auth/presentation/pages/login_page.dart';
 import 'package:mini_store/features/auth/presentation/widgets/auth_field.dart';
-import 'package:mini_store/features/auth/presentation/widgets/auth_gradient_button.dart';
+import 'package:mini_store/core/common/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,10 +38,9 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: BlocConsumer<AuthBloc, AuthState>(
-          //BlocConsumer is a mex between bloc builder and bloc listener which use builder to build the ui based on the state and listener to listen to the state changes and do something based on that such as show a snackbar or navigate to another page
           listener: (context, state) {
             if (state is AuthFailure) {
-              showSnackbar(context, state.message);
+              showSnackbar(context, state.message, isError: true);
             }
           },
           builder: (context, state) {
@@ -73,7 +72,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     isObscureText: true,
                   ),
                   SizedBox(height: 20),
-                  AuthGradientButton(
+                  GradientButton(
                     buttonText: 'Sign Up',
                     onPressed: () {
                       if (formKey.currentState!.validate()) {

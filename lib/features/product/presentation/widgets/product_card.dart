@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mini_store/core/common/entities/product.dart';
 import 'package:mini_store/core/theme/app_pallete.dart';
+import 'package:mini_store/core/common/widgets/gradient_button.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -39,7 +40,9 @@ class ProductCard extends StatelessWidget {
                       fit: BoxFit.contain,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return const Center(child: CircularProgressIndicator.adaptive());
+                        return const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        );
                       },
                     ),
                   ),
@@ -52,7 +55,9 @@ class ProductCard extends StatelessWidget {
                     child: IconButton(
                       icon: Icon(
                         isWishlisted ? Icons.favorite : Icons.favorite_border,
-                        color: isWishlisted ? AppPallete.gradient2 : Colors.white,
+                        color: isWishlisted
+                            ? AppPallete.gradient2
+                            : Colors.white,
                       ),
                       onPressed: onWishlistPressed,
                     ),
@@ -86,31 +91,27 @@ class ProductCard extends StatelessWidget {
             ),
           ),
           Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.star, color: Colors.amber, size: 16),
-                  const SizedBox(width: 4),
-                  Text(
-                    '${product.rating.rate} (${product.rating.count})',
-                    style: const TextStyle(color: AppPallete.greyColor),
-                  ),
-                  const Spacer(),
-                  ElevatedButton(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Icon(Icons.star, color: Colors.amber, size: 16),
+                const SizedBox(width: 4),
+                Text(
+                  '${product.rating.rate} (${product.rating.count})',
+                  style: const TextStyle(color: AppPallete.greyColor),
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: 79,
+                  height: 30,
+                  child: GradientButton(
+                    buttonText: 'Add',
                     onPressed: onAddToCartPressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppPallete.gradient1,
-                      foregroundColor: AppPallete.whiteColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                    ),
-                    child: Icon(Icons.add_shopping_cart),
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
+          ),
         ],
       ),
     );
