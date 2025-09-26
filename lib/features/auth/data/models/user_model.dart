@@ -5,9 +5,9 @@ class UserModel extends User {
     required super.id,
     required super.email,
     required super.name,
-  }); // here we are passing the parameters to the super class constructor which is the User class
+  });
 
   factory UserModel.fromJeson(Map<String, dynamic> map) {
-    return UserModel(id: map["id"] ?? '', email: map["email"] ?? '', name: map["name"] ?? '');
+    return UserModel(id: map["id"] ?? '', email: map["email"] ?? '',  name: map['name'] ?? map['user_metadata']?['name'] ?? '',);
   }
 }

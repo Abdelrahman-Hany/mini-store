@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_store/core/common/cubit/app_user/app_user_cubit.dart';
 import 'package:mini_store/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mini_store/features/auth/presentation/bloc/auth_event.dart';
 import 'package:mini_store/features/cart/presentation/cubit/cart_cubit.dart';
@@ -43,7 +44,16 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_pageTitles[_currentIndex]),
+        title: BlocBuilder<AppUserCubit, AppUserState>(
+          builder: (context, state) {
+            if (state is AppUserLoggedIn) {
+              if (_currentIndex == 0) {
+                return Text('Welcome, ${state.user.name}!');
+              }
+            }
+            return Text(_pageTitles[_currentIndex]);
+          },
+        ),
         actions: [
           BlocBuilder<WishlistCubit, WishlistState>(
             builder: (context, state) {
