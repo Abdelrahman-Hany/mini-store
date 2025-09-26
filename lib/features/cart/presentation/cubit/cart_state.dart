@@ -1,8 +1,15 @@
 part of 'cart_cubit.dart';
 
+class CartItem {
+  final Product product;
+  int quantity;
+
+  CartItem({required this.product, this.quantity = 1});
+}
+
 @immutable
 sealed class CartState {
-  final List<Product> cartItems;
+  final List<CartItem> cartItems;
   const CartState(this.cartItems);
 }
 
