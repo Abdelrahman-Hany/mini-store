@@ -30,10 +30,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _userLogout = userLogout,
        super(AuthInitial()) {
     on<AuthEvent>((_, emit) => emit(AuthLoading())); 
-    on<CheckCurrentUserEvent>(_isUserLoggedIn);
-    on<SignUpEvent>(_onAuthSighnUp);
+    on<SignUpEvent>(_onAuthSignUp);
     on<LoginEvent>(_onAuthLogin);
     on<AuthLogoutEvent>(_onLogout);
+    on<CheckCurrentUserEvent>(_isUserLoggedIn);
   }
 
   void _isUserLoggedIn(
@@ -47,15 +47,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(AuthFailure(message: onLeft.message));
         },
         (onRight) {
-          print('the ID is ${onRight.id}');
           _emitAuthSuccess(onRight, emit);
         },
       );
     });
   }
 
-  void _onAuthSighnUp(SignUpEvent event, Emitter<AuthState> emit) async {
-    // emit(AuthLoading());
+  void _onAuthSignUp(SignUpEvent event, Emitter<AuthState> emit) async {
     await _userSignUp(
       UserSignUpParams(
         name: event.name,
@@ -75,7 +73,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onAuthLogin(LoginEvent event, Emitter<AuthState> emit) async {
-    // emit(AuthLoading());
     await _userLogin(
       UserLoginParams(email: event.email, password: event.password),
     ).then((result) {
@@ -91,7 +88,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onLogout(AuthLogoutEvent event, Emitter<AuthState> emit) async {
-    // emit(AuthLoading());
     await _userLogout(NoParams()).then((result) {
       result.fold(
         (onLeft) {

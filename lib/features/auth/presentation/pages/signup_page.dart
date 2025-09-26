@@ -8,7 +8,6 @@ import 'package:mini_store/features/auth/presentation/widgets/auth_field.dart';
 import 'package:mini_store/core/common/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 class SignUpPage extends StatefulWidget {
   static route() => MaterialPageRoute(builder: (context) => SignUpPage());
   const SignUpPage({super.key});
@@ -41,6 +40,9 @@ class _SignUpPageState extends State<SignUpPage> {
           listener: (context, state) {
             if (state is AuthFailure) {
               showSnackbar(context, state.message, isError: true);
+            } else if (state is AuthSuccess) {
+              showSnackbar(context, 'Account created successfully!');
+              Navigator.of(context).popUntil((route) => route.isFirst);
             }
           },
           builder: (context, state) {

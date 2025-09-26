@@ -78,15 +78,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel?> getCurrentUserData() async {
     try {
       if (currentUserSession != null) {
-        final userData = await supabaseClient
-            .from('profiles')
-            .select() // 'profiles' is the name of the table in supabase database where we store user data, select() is used to fetch the entire column from the table
-            .eq(
+        final userData = await supabaseClient.from('profiles').select().eq(
               'id',
               currentUserSession!.user.id,
-            ); // eq() is used to filter the data based on a condition, here we are filtering the data where the id column is equal to the current user's id
-        return UserModel.fromJeson(userData[0]);
+            );
+        return UserModel.fromJeson(userData.first).copyWith(
+          email: currentUserSession!.user.email,
+        );
       }
+
       return null;
     } catch (e) {
       throw ServerException(e.toString());

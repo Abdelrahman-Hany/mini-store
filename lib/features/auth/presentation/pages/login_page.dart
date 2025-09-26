@@ -38,6 +38,8 @@ class _LoginPageState extends State<LoginPage> {
           listener: (context, state) {
             if (state is AuthFailure) {
               showSnackbar(context, state.message, isError: true);
+            } else if (state is AuthSuccess) {
+              showSnackbar(context, 'Login successful!');
             }
           },
           builder: (context, state) {
@@ -85,7 +87,6 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       Navigator.push(context, SignUpPage.route());
                     },
-
                     child: RichText(
                       text: TextSpan(
                         text: 'Don\'t have an account? ',

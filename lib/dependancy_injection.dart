@@ -1,5 +1,7 @@
 import 'package:http/http.dart' as http;
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:mini_store/core/common/cubit/app_user/app_user_cubit.dart';
+import 'package:mini_store/core/network/connection_checker.dart';
 import 'package:mini_store/core/secrets/app_secrets.dart';
 import 'package:mini_store/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:mini_store/features/auth/data/repositories/auth_repository_impl.dart';
@@ -37,6 +39,12 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton(() => http.Client());
 
   serviceLocator.registerLazySingleton(() => AppUserCubit());
+
+  serviceLocator.registerFactory(() => InternetConnection());
+
+  serviceLocator.registerFactory<ConnectionChecker>(
+    () => ConnectionCheckerImpl(serviceLocator()),
+  );
 }
 
 void _initAuth() {
@@ -47,7 +55,7 @@ void _initAuth() {
     )
     //Repository
     ..registerFactory<AuthRepository>(
-      () => AuthRepositoryImpl(remoteDataSource: serviceLocator()),
+      () => AuthRepositoryImpl(remoteDataSource: serviceLocator(), connectionChecker: serviceLocator()),
     )
     //Usecases
     ..registerFactory(() => UserSignUp(authRepository: serviceLocator()))

@@ -10,4 +10,16 @@ class UserModel extends User {
   factory UserModel.fromJeson(Map<String, dynamic> map) {
     return UserModel(id: map["id"] ?? '', email: map["email"] ?? '',  name: map['name'] ?? map['user_metadata']?['name'] ?? '',);
   }
+
+    UserModel copyWith({
+    String? id,
+    String? email,
+    String? name,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      name: name ?? this.name,
+    );
+  }
 }
