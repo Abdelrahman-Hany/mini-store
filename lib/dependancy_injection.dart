@@ -84,7 +84,7 @@ void _initProduct() {
       () => ProductRemoteDataSourceImpl(serviceLocator()),
     )
     ..registerFactory<ProductRepository>(
-      () => ProductRepositoryImpl(remoteDataSource: serviceLocator()),
+      () => ProductRepositoryImpl(remoteDataSource: serviceLocator(), connectionChecker: serviceLocator()),
     )
     ..registerFactory(() => GetAllProducts(productRepository: serviceLocator()))
     ..registerLazySingleton(

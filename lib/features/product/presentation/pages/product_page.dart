@@ -18,7 +18,6 @@ class _ProductPageState extends State<ProductPage> {
   @override
   void initState() {
     super.initState();
-    // Fetch products if they haven't been fetched yet
     if (context.read<ProductBloc>().state is! FetchSuccess) {
       context.read<ProductBloc>().add(FetchAllProducts());
     }
@@ -26,11 +25,10 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    // This widget no longer has a Scaffold or AppBar
     return BlocConsumer<ProductBloc, ProductState>(
       listener: (context, state) {
         if (state is ProductFailure) {
-          showSnackbar(context, state.message);
+          showSnackbar(context, state.message, isError: true);
         }
       },
       builder: (context, state) {
